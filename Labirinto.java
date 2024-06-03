@@ -6,17 +6,20 @@ public class Labirinto {
     private int base;
     private ArrayList<Tesouro> listaTesouros;
     private ArrayList<Armadilha> listaArmadilhas;
+    private int linhaAventureiro;
+    private int colunaAventureiro;
 
     public Labirinto(int dificuldade) {
         this.base = 2 * dificuldade - 1;
         this.piramide = new char[3][this.base];
         this.listaTesouros = new ArrayList<>();
         this.listaArmadilhas = new ArrayList<>();
+        this.linhaAventureiro = 0;
+        this.colunaAventureiro = this.base / 2;
         gerarLabirinto();
     }
 
-    @SuppressWarnings("unused")
-	public void gerarLabirinto() {
+    public void gerarLabirinto() {
         Random rand = new Random();
         // Inicializando a pirâmide com espaços vazios
         for (int i = 0; i < 3; i++) {
@@ -25,7 +28,7 @@ public class Labirinto {
             }
         }
         // Adicionando posição inicial do aventureiro
-        this.piramide[0][this.base / 2] = 'A';
+        this.piramide[linhaAventureiro][colunaAventureiro] = '&';
 
         // Adicionando tesouros e armadilhas aleatoriamente
         for (int i = 0; i < 10; i++) {
@@ -73,16 +76,14 @@ public class Labirinto {
             System.out.println();
         }
     }
-    public void atualizarPosicaoAventureiro(int linha, int coluna) {
+
+    public void atualizarPosicaoAventureiro(int novaLinha, int novaColuna) {
+        // Limpar a posição anterior do aventureiro
+        this.piramide[linhaAventureiro][colunaAventureiro] = ' ';
         // Atualizar a posição do aventureiro na pirâmide
-        this.piramide[linha][coluna] = 'A';
-        // Remover a posição anterior do aventureiro
-        for (int i = 0; i < base; i++) {
-            if (this.piramide[linha][i] == 'A') {
-                this.piramide[linha][i] = ' ';
-                break;
-            }
-        }
+        this.linhaAventureiro = novaLinha;
+        this.colunaAventureiro = novaColuna;
+        this.piramide[novaLinha][novaColuna] = '&';
     }
 
     public boolean isDentroDoLabirinto(int linha, int coluna) {
@@ -99,5 +100,9 @@ public class Labirinto {
 
     public void reiniciarJogo() {
         gerarLabirinto();
+    }
+
+    public int getBase() {
+        return this.base;
     }
 }
